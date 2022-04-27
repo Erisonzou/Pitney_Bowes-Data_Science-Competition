@@ -58,6 +58,9 @@ plot(Model_err.rate_df$Trees,Model_err.rate_df$nofail,ylim=c(0,1),type="l",col="
 lines(Model_err.rate_df$Trees,Model_err.rate_df$fail,col="red")
 lines(Model_err.rate_df$Trees,Model_err.rate_df$OOB)
 
+# usually the more trees there are the more accurate the model is
+# The graphs shows that after 100 trees were generated the trend of the lines don't change much anymore
+# Therefore its optimal to use just 100 trees for Random forest since the error rate don't change much after 100 trees
 
 #finding the optimal number of variables 
 
