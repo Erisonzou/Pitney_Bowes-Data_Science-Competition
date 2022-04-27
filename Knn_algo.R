@@ -57,6 +57,7 @@ tabl
 # "split" will determine the size of the training data 
 # d is the maximum k value
 # m is the number of random splits being generated
+# This function will return a matrix that contains the mean accuracy rate at each k value and the mean accuracy rate for when knn guess True right
 
 kcvSearch =
  function (X, Y, split=100, d=25, m=10) 
@@ -64,10 +65,11 @@ kcvSearch =
   if(class(Y)!= "factor") stop('Y is not factor type')
   if(class(X)!= "data.frame") stop('X is not data.frame type')
   rows = nrow(X)
-  Hold = rep(NA,d)
+  Hold = rep(NA,d,d)
   
   for(k in 1:d) {
   Store = rep(NA, m)
+  Store1 = rep(NA, m)
   
  for(j in 1:m) {
   Shuffle=sample(rows,rows)
@@ -80,8 +82,9 @@ kcvSearch =
   knn.pred = knn(TrainX, TestX, TrainY, k)
   table.out = table(knn.pred,TestY)
   Store[j] = (table.out[1,1]+table.out[2,2])/sum(table.out)
+  Store1[j] = (table.out[2,2])/(table.out[1,2]+table.out[2,2])
   }
-  Hold[k] = mean(Store)
+  Hold[k] = c(mean(Store),mean(Store1))
   }
   return(Hold)
  }
