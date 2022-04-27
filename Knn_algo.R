@@ -86,4 +86,7 @@ kcvSearch =
   return(Hold)
  }
 
-k_graph = kcvSearch(Train_x,Train_y,1200,20,30)
+k_graph = kcvSearch(Train_x,Train_y,5000,50,30)
+plot(k_graph, type="l")
+
+
