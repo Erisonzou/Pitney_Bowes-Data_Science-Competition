@@ -100,3 +100,12 @@ tune_knn.pred =knn(Train_x,Test_x,Train_y,k=45)
 tabl = table(tune_knn.pred,Test_y)
 tabl
 (tabl[1,1]+tabl[2,2])/sum(tabl)
+
+#import the real testing data, it will contain all the features except for fail_7
+test_data=read.csv(file.choose())
+
+# use the the tune_knn function on the testing data 
+tune_knn.pred =knn(Train_x,test_data,Train_y,k=45)
+
+#write the predicted fail_7 out to a csv file
+write.csv(tune_knn.pred, "test_fail_7.csv")
