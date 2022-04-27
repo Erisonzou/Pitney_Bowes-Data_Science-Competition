@@ -86,7 +86,17 @@ kcvSearch =
   return(Hold)
  }
 
-k_graph = kcvSearch(Train_x,Train_y,5000,50,30)
+# the  data will be split into 5000 rows of training data and will be randomized a total of 10 times
+# the knn funtion will run a total of 10 times for each k value 
+k_graph = kcvSearch(Train_x,Train_y,5000,100,10)
+
+# Plot out the k graph to show the accuracy rate at each k value 
 plot(k_graph, type="l")
 
+# Tune the knn function by setting the k value that will optimize the accuracy rate
+tune_knn.pred =knn(Train_x,Test_x,Train_y,k=45)
 
+#find the accuracy rate through the confusion matrix
+tabl = table(tune_knn.pred,Test_y)
+tabl
+(tabl[1,1]+tabl[2,2])/sum(tabl)
