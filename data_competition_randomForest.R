@@ -41,7 +41,19 @@ importance_df <- importance_df[order(importance_df$MeanDecreaseAccuracy, decreas
 head(importance_df,20)
 
 # new_df contains the most important features 
-new_df = data[,c("charge_cycle_time_below_12","discharging_rate_lag3","avg_volt_change_charging","avg_volt_change_discharging","max_voltage_day","charging_rate_lag3","avg_time_charging","avg_time_discharging","chargecycles","cycle_time","dischargecycles","avg_time_discharging_lag2")]
+new_df = data[,c("charge_cycle_time_below_12",
+                 "discharging_rate_lag3",
+                 "avg_volt_change_charging",
+                 "avg_volt_change_discharging",
+                 "max_voltage_day",
+                 "charging_rate_lag3",
+                 "avg_time_charging",
+                 "avg_time_discharging",
+                 "chargecycles",
+                 "cycle_time",
+                 "dischargecycles",
+                 "avg_time_discharging_lag2",
+                 "fail_7")]
 
 #creating a new randomForest Model based on the new_df
 new_Model = randomForest(fail_7~.,data=new_df,mtry=3,importance=TRUE)
@@ -79,7 +91,33 @@ rf_default
 #setting up the random model 
 control = trainControl(method="repeatedcv", number=10, repeats=3, search="random")
 rf_random = train(fail_7~., data=new_df, method="rf", metric="Accuracy", tuneLength=15, trControl=control)
+
+#plot the rf_random to find the optimal mtry value
 rf_random
 plot(rf_random)
 
+# input the test data
+test_data = read.csv(file.choose())
 
+
+test_data = test_data[,c("charge_cycle_time_below_12",
+                         "discharging_rate_lag3",
+                         "avg_volt_change_charging",
+                         "avg_volt_change_discharging",
+                         "max_voltage_day",
+                         "charging_rate_lag3",
+                         "avg_time_charging",
+                         "avg_time_discharging",
+                         "chargecycles",
+                         "cycle_time",
+                         "dischargecycles",
+                         "avg_time_discharging_lag2")]
+
+#create a Tuned model from the optimal mtry and ntree value 
+Tuned_Model = randomForest(fail_7~.,data=new_df,mtry=5,ntree=100,importance=TRUE)
+
+#predict the fail_7 of the test data with the new Tuned model
+test_prediction = predict(Tuned_Model,test_data)
+
+# export test predictions to a csv file
+write.csv(test_prediction,"test_predictions.csv")
