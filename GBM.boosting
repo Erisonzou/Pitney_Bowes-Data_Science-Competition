@@ -11,7 +11,8 @@ data = new_df = data[,c("charge_cycle_time_below_12",
 "chargecycles",
 "cycle_time",
 "dischargecycles",
-"avg_time_discharging_lag2")]
+"avg_time_discharging_lag2",
+"fail_7")]
 
 data = data[complete.cases(data), ]
 str(data)
