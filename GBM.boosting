@@ -25,14 +25,13 @@ Rows=sample(length(data$fail_7),10000)
 TEST=data[Rows,]
 TRAIN=data[-Rows,]
 
-library(gbm)
+library(caret)
 
-gbm.model = gbm(fail_7~., data=TRAIN, shrinkage=0.01, distribution = 'bernoulli', cv.folds=5, n.trees=3000, verbose=F)
+model_gbm <- caret::train(fail_7 ~ .,data = TRAIN,method = "gbm",preProcess = c("scale", "center"),trControl = control,verbose=0)
 
-best.iter = gbm.perf(gbm.model, method="cv")
+model_gbm
 
-best.iter
+Summary(model_gbm)
 
-summary(gbm.model)
 
 
