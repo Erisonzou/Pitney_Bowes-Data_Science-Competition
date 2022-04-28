@@ -84,7 +84,7 @@ kcvSearch =
   Store[j] = (table.out[1,1]+table.out[2,2])/sum(table.out)
 
   }
-  Hold[k] = c(mean(Store),mean(Store1))
+  Hold[k] = mean(Store)
   }
   return(Hold)
  }
