@@ -33,5 +33,7 @@ model_gbm
 
 Summary(model_gbm)
 
+prediction = predict(model_gbm,Test_data)
 
+write.csv(prediction,"gbm_predictions")
 
