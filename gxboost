@@ -1,0 +1,29 @@
+data = read.csv(file.choose())
+
+data = new_df = data[,c("charge_cycle_time_below_12",
+"discharging_rate_lag3",
+"avg_volt_change_charging",
+"avg_volt_change_discharging",
+"max_voltage_day",
+"charging_rate_lag3",
+"avg_time_charging",
+"avg_time_discharging",
+"chargecycles",
+"cycle_time",
+"dischargecycles",
+"avg_time_discharging_lag2",
+"fail_7")]
+
+data = data[complete.cases(data), ]
+str(data)
+
+data[data$charge_cycle_time_below_12==FALSE,]$charge_cycle_time_below_12 <- 0
+data[data$charge_cycle_time_below_12==TRUE,]$charge_cycle_time_below_12 <- 1
+
+
+Rows=sample(length(data$fail_7),10000)
+TEST=data[Rows,]
+TRAIN=data[-Rows,]
+
+params <- list(eval_metric = "auc", objective = "binary:logistic")
+Model <- xgboost(data=as.matrix(TRAIN),label=TRAIN$fail_7, params=params,nrounds=20,verbose=1)
