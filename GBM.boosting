@@ -1,0 +1,36 @@
+data = read.csv(file.choose())
+
+data = new_df = data[,c("charge_cycle_time_below_12",
+"discharging_rate_lag3",
+"avg_volt_change_charging",
+"avg_volt_change_discharging",
+"max_voltage_day",
+"charging_rate_lag3",
+"avg_time_charging",
+"avg_time_discharging",
+"chargecycles",
+"cycle_time",
+"dischargecycles",
+"avg_time_discharging_lag2")]
+
+data = data[complete.cases(data), ]
+str(data)
+
+
+data$fail_7 = as.factor(data$fail_7)
+data$charge_cycle_time_below_12 = as.factor(data$charge_cycle_time_below_12)
+
+Rows=sample(length(data$fail_7),10000)
+TEST=data[Rows,]
+TRAIN=data[-Rows,]
+
+library(gbm)
+
+gbm.model = gbm(fail_7~., data=TRAIN, shrinkage=0.01, distribution = 'bernoulli', cv.folds=5, n.trees=3000, verbose=F)
+
+best.iter = gbm.perf(gbm.model, method="cv")
+
+best.iter
+
+summary(gbm.model)
+
